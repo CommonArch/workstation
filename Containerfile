@@ -8,21 +8,33 @@ ARG CORE_BRANCH=main
 ARG VARIANT=general
 ARG DESKTOP=nogui
 
-RUN install-packages-build distrobox
+RUN install-packages-build distrobox ssh curl wget git
 
 RUN useradd -m -s /bin/bash aur && \
     echo "aur ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/aur && \
     mkdir -p /tmp_aur_build && chown -R aur /tmp_aur_build && \
-    install-packages-build git base-devel; \
+    install-packages-build base-devel; \
     runuser -u aur -- env -C /tmp_aur_build git clone 'https://aur.archlinux.org/paru-bin.git' && \
     runuser -u aur -- env -C /tmp_aur_build/paru-bin makepkg -si --noconfirm && \
     rm -rf /tmp_aur_build && \
-    runuser -u aur -- paru -S --noconfirm boxbuddy ptyxis waydroid; \
+    runuser -u aur -- paru -S --noconfirm ptyxis podman apx-gui; \
     userdel -rf aur; rm -rf /home/aur /etc/sudoers.d/aur
 
 COPY overlays/common overlay[s]/${DESKTOP} /
 
 RUN <<EOF
+cd /
+
+git clone https://github.com/Vanilla-OS/vanilla-apx-configs /usr/share/apx
+rm -rf /usr/share/apx/.git*
+cat > /etc/apx/apx.json <<'EOT'
+{
+    "apxPath": "/usr/share/apx",
+    "distroboxPath": "/usr/bin/distrobox",
+    "storageDriver": "overlay"
+}
+EOT
+
 if [ "$DESKTOP" == gnome ]; then
     pacman -Rcns --noconfirm gnome-console
 
@@ -31,6 +43,9 @@ if [ "$DESKTOP" == gnome ]; then
         ! -name "org.freedesktop.appstream.compose.metainfo.xml" \
         ! -name "org.gnome.Software.Plugin.Flatpak.metainfo.xml" \
         ! -name "org.gnome.Software.Plugin.Fwupd.metainfo.xml" -type f -exec rm -f {} +
+elif [ "$DESKTOP" == gnome ]; then
+    pacman -Rcns --noconfirm konsole yakuake
+    install-packages-build spectacle
 fi
 
 glib-compile-schemas /usr/share/glib-2.0/schemas

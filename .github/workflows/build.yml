@@ -20,7 +20,7 @@ jobs:
       max-parallel: 5
       matrix:
         variant: [general, nvidia]
-        desktop: [nogui, xfce, mate, budgie, gnome, plasma]
+        desktop: [gnome, plasma]
         include:
           - variant: general
             suffix: ''
