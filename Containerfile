@@ -34,12 +34,15 @@ cat > /etc/apx/apx.json <<'EOT'
     "storageDriver": "overlay"
 }
 EOT
-mkdir -p /usr/share/icons/hicolor/scalable/actions
+mkdir -p /usr/share/icons/hicolor/symbolic/{actions,apps}
 
 for icon in container-terminal-symbolic history-undo-symbolic package-symbolic puzzle-piece-symbolic; do
-    wget -O "/usr/share/icons/hicolor/scalable/actions/vanilla-${icon}.svg" \
+    wget -O "/usr/share/icons/hicolor/symbolic/actions/vanilla-${icon}.svg" \
         "https://raw.githubusercontent.com/Vanilla-OS/first-setup/main/data/icons/hicolor/symbolic/actions/vanilla-${icon}.svg"
 done
+
+wget -O /usr/share/icons/hicolor/symbolic/apps/org.gnome.SystemMonitor-symbolic.svg \
+    https://gitlab.gnome.org/GNOME/gnome-system-monitor/-/raw/master/data/icons/public/hicolor/symbolic/apps/org.gnome.SystemMonitor-symbolic.svg?ref_type=heads&inline=false
 
 if [ "$DESKTOP" == gnome ]; then
     pacman -Rcns --noconfirm gnome-console
