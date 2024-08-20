@@ -34,13 +34,13 @@ cat > /etc/apx/apx.json <<'EOT'
     "storageDriver": "overlay"
 }
 EOT
-mkdir -p /usr/share/icons/hicolor/{symbolic,scalable}/{actions,apps}
+mkdir -p /usr/share/icons/hicolor/{symbolic,scalable}/{actions,apps,legacy}
 
 for icon in container-terminal-symbolic history-undo-symbolic package-symbolic puzzle-piece-symbolic; do
     wget -O "/usr/share/icons/hicolor/symbolic/actions/vanilla-${icon}.svg" \
         "https://raw.githubusercontent.com/Vanilla-OS/first-setup/main/data/icons/hicolor/symbolic/actions/vanilla-${icon}.svg"
     cp "/usr/share/icons/hicolor/symbolic/actions/vanilla-${icon}.svg" "/usr/share/icons/hicolor/scalable/actions"
-done        
+done
 
 wget -O /usr/share/icons/hicolor/symbolic/apps/org.gnome.SystemMonitor-symbolic.svg \
     https://gitlab.gnome.org/GNOME/gnome-system-monitor/-/raw/master/data/icons/public/hicolor/symbolic/apps/org.gnome.SystemMonitor-symbolic.svg?ref_type=heads&inline=false
@@ -57,8 +57,9 @@ elif [ "$DESKTOP" = plasma ]; then
     pacman -Rcns --noconfirm konsole yakuake
     install-packages-build spectacle
 
-    mkdir -p /usr/share/icons/hicolor/symbolic/legacy
     cp /usr/share/icons/Adwaita/symbolic/legacy/preferences-desktop-apps-symbolic.svg /usr/share/icons/hicolor/symbolic/legacy
+    wget -O /usr/share/icons/hicolor/scalable/apps/org.gnome.SystemMonitor-symbolic.svg \
+        https://gitlab.gnome.org/GNOME/gnome-system-monitor/-/raw/master/data/icons/public/hicolor/symbolic/apps/org.gnome.SystemMonitor-symbolic.svg?ref_type=heads&inline=false
 fi
 
 glib-compile-schemas /usr/share/glib-2.0/schemas
