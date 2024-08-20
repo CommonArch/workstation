@@ -8,7 +8,7 @@ ARG CORE_BRANCH=main
 ARG VARIANT=general
 ARG DESKTOP=nogui
 
-RUN install-packages-build distrobox ssh curl wget git
+RUN install-packages-build distrobox openssh curl wget git
 
 RUN useradd -m -s /bin/bash aur && \
     echo "aur ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/aur && \
