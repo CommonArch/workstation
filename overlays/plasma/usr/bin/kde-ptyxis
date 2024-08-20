@@ -8,7 +8,7 @@ args=("${@//-e/--}")
  
 # Dolphin integration requires --new-window to function properly
 if [[ ! "${args[@]}" =~ "--" && ! "${args[@]}" =~ "-h" && ! "${args[@]}" =~ "-x" ]]; then
-        /usr/bin/ptyxis --new-window "${args[@]}"
+    /usr/bin/ptyxis --new-window "${args[@]}"
 else
-        /usr/bin/ptyxis "${args[@]}"
+    /usr/bin/ptyxis "${args[@]}"
 fi
