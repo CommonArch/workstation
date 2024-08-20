@@ -1,3 +1,7 @@
+[KDE]
+ColorScheme=BreezeDark
+widgetStyle=Breeze
+
 [General]
 TerminalApplication=kde-ptyxis
 TerminalService=org.gnome.Ptyxis.desktop

@@ -34,6 +34,12 @@ cat > /etc/apx/apx.json <<'EOT'
     "storageDriver": "overlay"
 }
 EOT
+mkdir -p /usr/share/icons/hicolor/scalable/actions
+
+for icon in container-terminal-symbolic history-undo-symbolic package-symbolic puzzle-piece-symbolic; do
+    wget -O "/usr/share/icons/hicolor/scalable/actions/vanilla-${icon}.svg" \
+        "https://raw.githubusercontent.com/Vanilla-OS/first-setup/main/data/icons/hicolor/symbolic/actions/vanilla-${icon}.svg"
+done
 
 if [ "$DESKTOP" == gnome ]; then
     pacman -Rcns --noconfirm gnome-console
@@ -43,9 +49,12 @@ if [ "$DESKTOP" == gnome ]; then
         ! -name "org.freedesktop.appstream.compose.metainfo.xml" \
         ! -name "org.gnome.Software.Plugin.Flatpak.metainfo.xml" \
         ! -name "org.gnome.Software.Plugin.Fwupd.metainfo.xml" -type f -exec rm -f {} +
-elif [ "$DESKTOP" == gnome ]; then
+elif [ "$DESKTOP" == plasma ]; then
     pacman -Rcns --noconfirm konsole yakuake
     install-packages-build spectacle
+
+    mkdir -p /usr/share/icons/hicolor/symbolic/legacy
+    cp /usr/share/icons/Adwaita/symbolic/legacy/preferences-desktop-apps-symbolic.svg /usr/share/icons/hicolor/symbolic/legacy
 fi
 
 glib-compile-schemas /usr/share/glib-2.0/schemas
