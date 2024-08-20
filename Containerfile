@@ -34,17 +34,18 @@ cat > /etc/apx/apx.json <<'EOT'
     "storageDriver": "overlay"
 }
 EOT
-mkdir -p /usr/share/icons/hicolor/symbolic/{actions,apps}
+mkdir -p /usr/share/icons/hicolor/{symbolic,scalable}/{actions,apps}
 
 for icon in container-terminal-symbolic history-undo-symbolic package-symbolic puzzle-piece-symbolic; do
     wget -O "/usr/share/icons/hicolor/symbolic/actions/vanilla-${icon}.svg" \
         "https://raw.githubusercontent.com/Vanilla-OS/first-setup/main/data/icons/hicolor/symbolic/actions/vanilla-${icon}.svg"
-done
+    cp "/usr/share/icons/hicolor/symbolic/actions/vanilla-${icon}.svg" "/usr/share/icons/hicolor/scalable/actions"
+done        
 
 wget -O /usr/share/icons/hicolor/symbolic/apps/org.gnome.SystemMonitor-symbolic.svg \
     https://gitlab.gnome.org/GNOME/gnome-system-monitor/-/raw/master/data/icons/public/hicolor/symbolic/apps/org.gnome.SystemMonitor-symbolic.svg?ref_type=heads&inline=false
 
-if [ "$DESKTOP" == gnome ]; then
+if [ "$DESKTOP" = gnome ]; then
     pacman -Rcns --noconfirm gnome-console
 
     find /usr/share/metainfo \
@@ -52,7 +53,7 @@ if [ "$DESKTOP" == gnome ]; then
         ! -name "org.freedesktop.appstream.compose.metainfo.xml" \
         ! -name "org.gnome.Software.Plugin.Flatpak.metainfo.xml" \
         ! -name "org.gnome.Software.Plugin.Fwupd.metainfo.xml" -type f -exec rm -f {} +
-elif [ "$DESKTOP" == plasma ]; then
+elif [ "$DESKTOP" = plasma ]; then
     pacman -Rcns --noconfirm konsole yakuake
     install-packages-build spectacle
 
@@ -70,6 +71,8 @@ rm -f /usr/share/applications/bvnc.desktop
 rm -f /usr/share/applications/electron*.desktop
 rm -f /usr/share/applications/avahi-discover.desktop
 rm -f /usr/share/applications/bssh.desktop
+
+gtk-update-icon-cache
 EOF
 
 RUN rm -f /.gitkeep
