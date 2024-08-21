@@ -74,6 +74,17 @@ rm -f /usr/share/applications/avahi-discover.desktop
 rm -f /usr/share/applications/bssh.desktop
 
 gtk-update-icon-cache
+
+if [ "$VARIANT" = nvidia ]; then
+    install-packages-build nvidia-settings nvidia-prime
+
+    echo >> /etc/default/grub
+    echo 'GRUB_CMDLINE_LINUX_DEFAULT="${GRUB_CMDLINE_LINUX_DEFAULT} nvidia_drm.modeset=1"' >> /etc/default/grub
+
+    mkdir -p /etc/modprobe.d
+    echo 'options nvidia "NVreg_PreserveVideoMemoryAllocations=1"' > /etc/modprobe.d/nvidia.conf
+
+    systemctl enable nvidia-suspend nvidia-hibernate nvidia-resume
 EOF
 
 RUN rm -f /.gitkeep
