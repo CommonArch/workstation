@@ -85,6 +85,7 @@ if [ "$VARIANT" = nvidia ]; then
     echo 'options nvidia "NVreg_PreserveVideoMemoryAllocations=1"' > /etc/modprobe.d/nvidia.conf
 
     systemctl enable nvidia-suspend nvidia-hibernate nvidia-resume
+fi
 EOF
 
 RUN rm -f /.gitkeep
